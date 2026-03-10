@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Now冥想10周年庆 - 0元抽免单</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- 背景图片层 -->
+        <img src="assets/background.png" class="bg-img" alt="背景">
+        
+        <!-- 转盘展示区域 -->
+        <div class="wheel-stage">
+            <div class="wheel-container">
+                <img src="assets/wheel.png" id="wheelImg" class="wheel-img" alt="转盘">
+                <img src="assets/pointer.png" class="pointer-img" alt="指针">
+            </div>
+            
+            <!-- 抽奖按钮：使用用户提供的 assets/button.png -->
+            <div class="draw-btn-container">
+                <img src="assets/button.png" class="draw-btn-img" alt="立即抽奖">
+                <button id="drawBtn" class="draw-btn-overlay"></button>
+            </div>
+        </div>
+
+        <!-- 底部Logo已包含在背景图中，如需独立点击可在此添加透明层 -->
+        <div class="bottom-logo-placeholder"></div>
+    </div>
+
+    <!-- 中奖弹窗 -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-icon" id="modalIcon">🎉</div>
+            <h2 class="modal-title" id="modalTitle">恭喜中奖！</h2>
+            <p class="modal-prize" id="modalPrize"></p>
+            <p class="modal-desc" id="modalDesc"></p>
+            <button class="modal-btn" id="modalBtn">知道了</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

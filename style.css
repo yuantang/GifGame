@@ -1,0 +1,158 @@
+/* ============================================
+   Now冥想10周年庆 - 1:1 还原设计稿
+   ============================================ */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f47a3e; /* 兜底背景色 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.page-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 500px;
+    background-color: #f47a3e;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 核心背景图采用 cover 铺满 */
+.bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* 转盘舞台区域 - 根据背景图比例微调位置 */
+.wheel-stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -46%);
+    width: 78%;
+    aspect-ratio: 1 / 1.2;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wheel-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.wheel-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+}
+
+/* 指针定位：水滴略偏下居中 */
+.pointer-img {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -90%);
+    width: 13%;
+    z-index: 10;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* 按钮容器 */
+.draw-btn-container {
+    position: absolute;
+    bottom: -15%; /* 根据设计稿微调按钮垂直位置 */
+    width: 65%;
+    transform: translateX(0); /* 保持水平居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    transition: transform 0.1s;
+}
+
+.draw-btn-img {
+    width: 100%;
+    display: block;
+}
+
+/* 覆盖层按钮，处理点击交互 */
+.draw-btn-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.draw-btn-container:active {
+    transform: scale(0.95);
+}
+
+/* --- 弹窗样式 --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    width: 80%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    border: none; background: none; font-size: 20px; color: #ccc;
+    cursor: pointer;
+}
+
+.modal-icon { font-size: 50px; margin-bottom: 10px; }
+.modal-title { color: #e84430; margin-bottom: 5px; }
+.modal-prize { font-weight: bold; margin-bottom: 20px; }
+.modal-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background: #e84430;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
