@@ -19,12 +19,6 @@
     'use strict';
 
     // ===== 奖品配置：顺序必须与 wheel.png 物理扇区位置完全一致！ =====
-    // index 0 → 0°  → 一等奖
-    // index 1 → 60° → 谢谢参与
-    // index 2 → 120° → 二等奖
-    // index 3 → 180° → 谢谢参与
-    // index 4 → 240° → 三等奖
-    // index 5 → 300° → 四等奖
     const PRIZES = [
         { name: '一等奖',   desc: '0元学价值¥25800正念引导师培课',    probability: 0,      isWin: true  },
         { name: '谢谢参与', desc: '很遗憾，未中奖，感谢参与',           probability: 0.2725, isWin: false },
@@ -47,7 +41,6 @@
     let totalRotation = 0; // 累计旋转角度（只增不减）
 
     // ===== 生成简单的设备指纹 (Device Fingerprint) =====
-    // 结合 UserAgent、屏幕分辨率、语言等参数，在微信内形成较强的设备识别
     function getDeviceFingerprint() {
         const info = [
             navigator.userAgent,
@@ -56,12 +49,11 @@
             navigator.platform
         ].join('|');
         
-        // 简单的哈希处理
         let hash = 0;
         for (let i = 0; i < info.length; i++) {
             const char = info.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32bit integer
+            hash = hash & hash;
         }
         return 'dfp_' + Math.abs(hash);
     }
@@ -70,12 +62,9 @@
     function checkDrawStatus() {
         const fingerprint = getDeviceFingerprint();
         const hasDrawnByFP = localStorage.getItem('drawn_' + fingerprint);
-        const hasDrawnLegacy = localStorage.getItem('now_10th_has_drawn'); // 兼容旧版
+        const hasDrawnLegacy = localStorage.getItem('now_10th_has_drawn');
         
-        if (hasDrawnByFP || hasDrawnLegacy) {
-            return true;
-        }
-        return false;
+        return !!(hasDrawnByFP || hasDrawnLegacy);
     }
 
     // ===== 抽奖概率逻辑 =====
@@ -86,15 +75,13 @@
             cumulative += PRIZES[i].probability;
             if (rand < cumulative) return i;
         }
-        // 概率总和应该 = 1，兜底返回第一个"谢谢参与"
         return 1;
     }
 
-    // ===== 抽奖逻辑 =====
+    // ===== 抽奖执行逻辑 =====
     function spin(targetIndex) {
         if (isSpinning) return;
         
-        // 再次校验状态
         if (checkDrawStatus()) {
             showNoticeModal('您已参与过', '您已参与过活动，每人仅限一次机会哦！');
             return;
@@ -105,14 +92,23 @@
 
         // 目标奖项在 wheel.png 中的物理角度
         const targetPhysicalAngle = targetIndex * 60;
-/* ... 保持原有旋转逻辑 ... */
-        totalRotation += addDeg;
+
+        // 计算需要旋转的步长，消除累积角度误差
+        const targetRest = (360 - targetPhysicalAngle) % 360;
+        const currentRest = totalRotation % 360;
+
+        let addDeg = targetRest - currentRest;
+        if (addDeg <= 0) addDeg += 360;
+
+        // 加上随机 7-8 圈并增加一点扇区内偏移（+/- 20度）
+        const randomOffset = (Math.random() - 0.5) * 40;
+        const extraRounds = 7 + Math.floor(Math.random() * 2);
+        const totalAddDeg = (extraRounds * 360) + addDeg + randomOffset;
+
+        totalRotation += totalAddDeg;
 
         console.log(
-            `[抽奖] 奖项: ${PRIZES[targetIndex].name} | ` +
-            `物理角度: ${targetPhysicalAngle}° | ` +
-            `设备指纹: ${getDeviceFingerprint()} | ` +
-            `本次步长: ${addDeg}°`
+            `[抽奖] 奖项: ${PRIZES[targetIndex].name} | 指纹: ${getDeviceFingerprint()} | 总旋转: ${totalRotation}°`
         );
 
         wheelImg.style.transform = `rotate(${totalRotation}deg)`;
@@ -121,16 +117,16 @@
             isSpinning = false;
             drawBtn.disabled = false;
             
-            // 标记该设备指纹已参与
+            // 写入持久化标记
             const fp = getDeviceFingerprint();
             localStorage.setItem('drawn_' + fp, 'true');
-            localStorage.setItem('now_10th_has_drawn', 'true'); // 双重锁定
+            localStorage.setItem('now_10th_has_drawn', 'true');
             
             showResult(targetIndex);
-        }, 5200); // 略长于 CSS 过渡动画(5s)，确保动画完全结束
+        }, 5200);
     }
 
-    // ===== 弹窗：显示中奖结果 =====
+    // ===== 弹窗展示 =====
     function showResult(index) {
         const prize = PRIZES[index];
         modalIcon.textContent = prize.isWin ? '🎉' : '😊';
@@ -139,9 +135,8 @@
         modal.classList.add('active');
     }
 
-    // ===== 弹窗：显示友情提示（如：已参与） =====
     function showNoticeModal(title, text) {
-        modalIcon.textContent = '�';
+        modalIcon.textContent = '💡';
         modalTitle.textContent = title;
         modalPrize.textContent = text;
         modal.classList.add('active');
@@ -154,20 +149,18 @@
     // ===== 事件绑定 =====
     drawBtn.addEventListener('click', () => {
         if (checkDrawStatus()) {
-            showNoticeModal('您已参与过', '该设备已参与过活动，每人仅限一次机会哦！');
+            showNoticeModal('您已参与过', '您已参与过活动，每人仅限一次机会哦！');
             return;
         }
-        const index = pickPrize();
-        spin(index);
+        spin(pickPrize());
     });
 
     modalClose.addEventListener('click', closeModal);
     modalBtn.addEventListener('click', closeModal);
 
-    // 页面加载逻辑
     (function init() {
         if (checkDrawStatus()) {
-            console.log('检测到该设备已参与：' + getDeviceFingerprint());
+            console.log('检测到此设备已参与活动');
         }
     })();
 })();
