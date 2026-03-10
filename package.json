@@ -4,7 +4,8 @@
   "description": "Now冥想10周年庆 - 1:1 还原设计稿大转盘抽奖页面",
   "main": "index.html",
   "scripts": {
-    "start": "echo \"Serving static files...\""
+    "start": "echo \"Serving static files...\"",
+    "build": "echo \"No build needed for static files\""
   },
   "keywords": [],
   "author": "",
