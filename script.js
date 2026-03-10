@@ -96,7 +96,7 @@
         
         // 再次校验状态
         if (checkDrawStatus()) {
-            showNoticeModal('您已参与过', '该设备已参与过活动，每人仅限一次机会哦！');
+            showNoticeModal('您已参与过', '您已参与过活动，每人仅限一次机会哦！');
             return;
         }
 
