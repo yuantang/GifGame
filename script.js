@@ -46,13 +46,33 @@
     let isSpinning = false;
     let totalRotation = 0; // 累计旋转角度（只增不减）
 
+    // ===== 生成简单的设备指纹 (Device Fingerprint) =====
+    // 结合 UserAgent、屏幕分辨率、语言等参数，在微信内形成较强的设备识别
+    function getDeviceFingerprint() {
+        const info = [
+            navigator.userAgent,
+            screen.width + 'x' + screen.height,
+            navigator.language,
+            navigator.platform
+        ].join('|');
+        
+        // 简单的哈希处理
+        let hash = 0;
+        for (let i = 0; i < info.length; i++) {
+            const char = info.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return 'dfp_' + Math.abs(hash);
+    }
+
     // ===== 初始化：检查参与状态 =====
     function checkDrawStatus() {
-        const hasDrawn = localStorage.getItem('now_10th_has_drawn');
-        if (hasDrawn) {
-            // 如果已参与，禁用按钮并修改显示（可选）
-            // drawBtn.style.opacity = '0.6';
-            // drawBtn.style.pointerEvents = 'none';
+        const fingerprint = getDeviceFingerprint();
+        const hasDrawnByFP = localStorage.getItem('drawn_' + fingerprint);
+        const hasDrawnLegacy = localStorage.getItem('now_10th_has_drawn'); // 兼容旧版
+        
+        if (hasDrawnByFP || hasDrawnLegacy) {
             return true;
         }
         return false;
@@ -76,7 +96,7 @@
         
         // 再次校验状态
         if (checkDrawStatus()) {
-            alert('您已经参与过本次活动啦，每人仅限一次机会哦！');
+            alert('该设备已参与过活动，每人仅限一次机会哦！');
             return;
         }
 
@@ -103,7 +123,7 @@
         console.log(
             `[抽奖] 奖项: ${PRIZES[targetIndex].name} | ` +
             `物理角度: ${targetPhysicalAngle}° | ` +
-            `累计旋转: ${totalRotation}° | ` +
+            `设备指纹: ${getDeviceFingerprint()} | ` +
             `本次步长: ${addDeg}°`
         );
 
@@ -113,8 +133,10 @@
             isSpinning = false;
             drawBtn.disabled = false;
             
-            // 标记已参与
-            localStorage.setItem('now_10th_has_drawn', 'true');
+            // 标记该设备指纹已参与
+            const fp = getDeviceFingerprint();
+            localStorage.setItem('drawn_' + fp, 'true');
+            localStorage.setItem('now_10th_has_drawn', 'true'); // 双重锁定
             
             showResult(targetIndex);
         }, 5200); // 略长于 CSS 过渡动画(5s)，确保动画完全结束
@@ -141,7 +163,7 @@
     // ===== 事件绑定 =====
     drawBtn.addEventListener('click', () => {
         if (checkDrawStatus()) {
-            alert('您已经参与过本次活动啦，每人仅限一次机会哦！');
+            alert('该设备已参与过活动，每人仅限一次机会哦！');
             return;
         }
         const index = pickPrize();
@@ -151,8 +173,10 @@
     modalClose.addEventListener('click', closeModal);
     modalBtn.addEventListener('click', closeModal);
 
-    // 页面加载时简单校验（可选：可以在此处直接置灰按钮）
-    if (checkDrawStatus()) {
-        console.log('用户已参与过抽奖');
-    }
+    // 页面加载逻辑
+    (function init() {
+        if (checkDrawStatus()) {
+            console.log('检测到该设备已参与：' + getDeviceFingerprint());
+        }
+    })();
 })();
