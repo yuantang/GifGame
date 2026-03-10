@@ -46,6 +46,18 @@
     let isSpinning = false;
     let totalRotation = 0; // 累计旋转角度（只增不减）
 
+    // ===== 初始化：检查参与状态 =====
+    function checkDrawStatus() {
+        const hasDrawn = localStorage.getItem('now_10th_has_drawn');
+        if (hasDrawn) {
+            // 如果已参与，禁用按钮并修改显示（可选）
+            // drawBtn.style.opacity = '0.6';
+            // drawBtn.style.pointerEvents = 'none';
+            return true;
+        }
+        return false;
+    }
+
     // ===== 抽奖概率逻辑 =====
     function pickPrize() {
         const rand = Math.random();
@@ -61,6 +73,13 @@
     // ===== 旋转逻辑 =====
     function spin(targetIndex) {
         if (isSpinning) return;
+        
+        // 再次校验状态
+        if (checkDrawStatus()) {
+            alert('您已经参与过本次活动啦，每人仅限一次机会哦！');
+            return;
+        }
+
         isSpinning = true;
         drawBtn.disabled = true;
 
@@ -93,6 +112,10 @@
         setTimeout(() => {
             isSpinning = false;
             drawBtn.disabled = false;
+            
+            // 标记已参与
+            localStorage.setItem('now_10th_has_drawn', 'true');
+            
             showResult(targetIndex);
         }, 5200); // 略长于 CSS 过渡动画(5s)，确保动画完全结束
     }
@@ -117,10 +140,19 @@
 
     // ===== 事件绑定 =====
     drawBtn.addEventListener('click', () => {
+        if (checkDrawStatus()) {
+            alert('您已经参与过本次活动啦，每人仅限一次机会哦！');
+            return;
+        }
         const index = pickPrize();
         spin(index);
     });
 
     modalClose.addEventListener('click', closeModal);
     modalBtn.addEventListener('click', closeModal);
+
+    // 页面加载时简单校验（可选：可以在此处直接置灰按钮）
+    if (checkDrawStatus()) {
+        console.log('用户已参与过抽奖');
+    }
 })();
