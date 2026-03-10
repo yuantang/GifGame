@@ -1,0 +1,12 @@
+{
+  "name": "gif-game",
+  "version": "1.0.0",
+  "description": "Now冥想10周年庆 - 1:1 还原设计稿大转盘抽奖页面",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo \"Serving static files...\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
