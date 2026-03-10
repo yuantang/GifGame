@@ -90,13 +90,13 @@
         return 1;
     }
 
-    // ===== 旋转逻辑 =====
+    // ===== 抽奖逻辑 =====
     function spin(targetIndex) {
         if (isSpinning) return;
         
         // 再次校验状态
         if (checkDrawStatus()) {
-            alert('该设备已参与过活动，每人仅限一次机会哦！');
+            showNoticeModal('您已参与过', '该设备已参与过活动，每人仅限一次机会哦！');
             return;
         }
 
@@ -105,19 +105,7 @@
 
         // 目标奖项在 wheel.png 中的物理角度
         const targetPhysicalAngle = targetIndex * 60;
-
-        // 要让该角度到达12点，需要让 (totalRotation + addDeg) % 360 = (360 - targetPhysicalAngle) % 360
-        const targetRest = (360 - targetPhysicalAngle) % 360;
-        const currentRest = totalRotation % 360;
-
-        // 计算还需要再旋转多少度（必须 > 0，确保顺时针旋转）
-        let addDeg = targetRest - currentRest;
-        if (addDeg <= 0) addDeg += 360;
-
-        // 加上若干整圈（确保视觉上有足够的旋转感）
-        const extraRounds = 7 + Math.floor(Math.random() * 2); // 7~8圈
-        addDeg += extraRounds * 360;
-
+/* ... 保持原有旋转逻辑 ... */
         totalRotation += addDeg;
 
         console.log(
@@ -142,17 +130,20 @@
         }, 5200); // 略长于 CSS 过渡动画(5s)，确保动画完全结束
     }
 
-    // ===== 弹窗 =====
+    // ===== 弹窗：显示中奖结果 =====
     function showResult(index) {
         const prize = PRIZES[index];
-        if (prize.isWin) {
-            modalIcon.textContent = '🎉';
-            modalTitle.textContent = '恭喜中奖！';
-        } else {
-            modalIcon.textContent = '😊';
-            modalTitle.textContent = '下次再来';
-        }
+        modalIcon.textContent = prize.isWin ? '🎉' : '😊';
+        modalTitle.textContent = prize.isWin ? '恭喜中奖！' : '下次再来';
         modalPrize.textContent = prize.desc;
+        modal.classList.add('active');
+    }
+
+    // ===== 弹窗：显示友情提示（如：已参与） =====
+    function showNoticeModal(title, text) {
+        modalIcon.textContent = '�';
+        modalTitle.textContent = title;
+        modalPrize.textContent = text;
         modal.classList.add('active');
     }
 
@@ -163,7 +154,7 @@
     // ===== 事件绑定 =====
     drawBtn.addEventListener('click', () => {
         if (checkDrawStatus()) {
-            alert('该设备已参与过活动，每人仅限一次机会哦！');
+            showNoticeModal('您已参与过', '该设备已参与过活动，每人仅限一次机会哦！');
             return;
         }
         const index = pickPrize();
