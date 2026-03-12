@@ -158,6 +158,19 @@
     modalClose.addEventListener('click', closeModal);
     modalBtn.addEventListener('click', closeModal);
 
+    // ===== 规则详情弹窗逻辑 =====
+    const ruleBtn = document.getElementById('ruleBtn');
+    const ruleModal = document.getElementById('ruleModal');
+    const ruleModalClose = document.getElementById('ruleModalClose');
+    const ruleModalBtn = document.getElementById('ruleModalBtn');
+
+    if (ruleBtn) {
+        ruleBtn.addEventListener('click', () => ruleModal.classList.add('active'));
+    }
+    const closeRule = () => ruleModal.classList.remove('active');
+    if (ruleModalClose) ruleModalClose.addEventListener('click', closeRule);
+    if (ruleModalBtn) ruleModalBtn.addEventListener('click', closeRule);
+
     (function init() {
         if (checkDrawStatus()) {
             console.log('检测到此设备已参与活动');

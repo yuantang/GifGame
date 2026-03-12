@@ -28,15 +28,28 @@
         <!-- 底部Logo已包含在背景图中，如需独立点击可在此添加透明层 -->
         <div class="bottom-logo-placeholder"></div>
 
-        <!-- 活动规则板块 -->
-        <div class="rules-container">
-            <h3 class="rules-title">活动规则</h3>
-            <ul class="rules-list">
-                <li><strong>活动时间：</strong>3月9日-3月20日</li>
-                <li><strong>抽奖次数：</strong>每人仅限抽一次，仅限3月9日-3月20日期间报名Now冥想正式课（师资/八周减压/八周幸福/止语）的学员</li>
-                <li><strong>核对奖品：</strong>中奖后，凭中奖截图，联系报名老师核对奖品，奖品将在活动结束后1周后寄出。</li>
-                <li>本次活动最终解释权归Now冥想研习院所有</li>
-            </ul>
+        <!-- 悬浮规则按钮 -->
+        <div id="ruleBtn" class="rule-float-btn">活动规则</div>
+    </div>
+
+    <!-- 规则详情弹窗 -->
+    <div id="ruleModal" class="modal-overlay">
+        <div class="modal-content rule-modal">
+            <div class="modal-header">
+                <h3>活动规则</h3>
+                <span id="ruleModalClose" class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="rules-list">
+                    <li><strong>活动时间：</strong>3月9日-3月20日</li>
+                    <li><strong>抽奖次数：</strong>每人仅限抽一次，仅限3月9日-3月20日期间报名Now冥想正式课（师资/八周减压/八周幸福/止语）的学员</li>
+                    <li><strong>核对奖品：</strong>中奖后，凭中奖截图，联系报名老师核对奖品，奖品将在活动结束后1周后寄出。</li>
+                    <li>本次活动最终解释权归Now冥想研习院所有</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button id="ruleModalBtn" class="confirm-btn">我知道了</button>
+            </div>
         </div>
     </div>
 

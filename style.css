@@ -158,24 +158,70 @@ body {
 }
 
 /* 活动规则样式 */
-.rules-container {
-    margin: 20px 25px 40px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.rule-float-btn {
+    position: fixed;
+    right: 0;
+    top: 20%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
     color: #fff;
-    text-align: left;
+    padding: 8px 12px 8px 15px;
+    border-radius: 20px 0 0 20px;
+    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-right: none;
+    z-index: 100;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
 }
 
-.rules-title {
+.rule-float-btn:active {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.rule-modal {
+    max-width: 85%;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    padding: 25px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    color: #e84430;
     font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-    color: #ffd43b;
-    font-weight: bold;
-    letter-spacing: 1px;
+    margin: 0;
+}
+
+.close-btn {
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
 }
 
 .rules-list {
@@ -187,18 +233,37 @@ body {
 .rules-list li {
     font-size: 14px;
     line-height: 1.6;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     position: relative;
     padding-left: 15px;
+    color: #333;
 }
 
 .rules-list li::before {
     content: "•";
     position: absolute;
     left: 0;
-    color: #ffd43b;
+    color: #f75d5d;
+    font-weight: bold;
 }
 
 .rules-list li strong {
-    color: #ffd43b;
+    color: #f75d5d;
 }
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.confirm-btn {
+    background: #e84430;
+    color: #fff;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
