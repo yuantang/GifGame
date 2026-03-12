@@ -156,3 +156,49 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
+/* 活动规则样式 */
+.rules-container {
+    margin: 20px 25px 40px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-align: left;
+}
+
+.rules-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #ffd43b;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.rules-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.rules-list li {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.rules-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #ffd43b;
+}
+
+.rules-list li strong {
+    color: #ffd43b;
+}

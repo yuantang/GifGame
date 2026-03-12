@@ -21,9 +21,9 @@
     // ===== 奖品配置：顺序必须与 wheel.png 物理扇区位置完全一致！ =====
     const PRIZES = [
         { name: '一等奖',   desc: '0元学价值¥25800正念引导师培课',    probability: 0,      isWin: true  },
-        { name: '谢谢参与', desc: '很遗憾，未中奖，感谢参与',           probability: 0.2725, isWin: false },
-        { name: '二等奖',   desc: '0元学正念/冥想正汇合一期课程',       probability: 0.015,  isWin: true  },
-        { name: '谢谢参与', desc: '感谢参与，期待下次再相遇',           probability: 0.2725, isWin: false },
+        { name: '谢谢参与', desc: '很遗憾，未中奖，感谢参与',           probability: 0.275,  isWin: false },
+        { name: '二等奖',   desc: '0元学正念/冥想正汇合一期课程',       probability: 0.01,   isWin: true  },
+        { name: '谢谢参与', desc: '感谢参与，期待下次再相遇',           probability: 0.275,  isWin: false },
         { name: '三等奖',   desc: '《多舛的生命》或《正念的奇迹》一本', probability: 0.19,   isWin: true  },
         { name: '四等奖',   desc: 'Now年卡会员一张',                   probability: 0.25,   isWin: true  }
     ];
